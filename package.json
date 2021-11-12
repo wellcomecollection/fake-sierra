@@ -4,17 +4,25 @@
   "repository": "git@github.com:wellcomecollection/fake-sierra.git",
   "license": "MIT",
   "scripts": {
+    "start": "NODE_ENV=production ts-node --transpile-only index.ts",
+    "dev": "NODE_ENV=development nodemon index.ts",
+    "test": "jest",
     "prepare": "husky install"
   },
   "dependencies": {
+    "fastify": "^3.23.1",
     "ts-node": "^10.4.0",
     "typescript": "^4.4.4"
   },
   "devDependencies": {
+    "@types/jest": "^27.0.2",
     "@types/node": "^16.11.7",
     "husky": ">=6",
+    "jest": "^27.3.1",
     "lint-staged": ">=10",
-    "prettier": "^2.4.1"
+    "nodemon": "^2.0.15",
+    "prettier": "^2.4.1",
+    "ts-jest": "^27.0.7"
   },
   "lint-staged": {
     "*.{js,css,md}": "prettier --write"
