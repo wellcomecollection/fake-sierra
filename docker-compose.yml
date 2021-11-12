@@ -1,0 +1,11 @@
+version: '3.4'
+services:
+  app_prod:
+    build:
+      context: .
+      target: production
+
+  app_test:
+    build:
+      context: .
+      target: testing
