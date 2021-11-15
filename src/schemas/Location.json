@@ -1,0 +1,21 @@
+{
+  "$id": "Location",
+  "name": "Location",
+  "description": "a location",
+  "required": [
+    "code",
+    "name"
+  ],
+  "properties": {
+    "code": {
+      "description": "the location code",
+      "position": 0,
+      "type": "string"
+    },
+    "name": {
+      "description": "the location display name",
+      "position": 0,
+      "type": "string"
+    }
+  }
+}

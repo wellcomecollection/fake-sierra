@@ -1,0 +1,14 @@
+{
+  "$id": "FixedFieldVal",
+  "name": "FixedFieldVal",
+  "description": "a fixed-length field value from a bibliographic record or item record (can be a String, LocalDate, DateTime, Boolean, Long, or Decimal depending on the field",
+  "required": [
+    "value"
+  ],
+  "properties": {
+    "value": {
+      "description": "the value of the field (can be a String, LocalDate, DateTime, Boolean, Long, or Decimal depending on the field)",
+      "position": 0
+    }
+  }
+}

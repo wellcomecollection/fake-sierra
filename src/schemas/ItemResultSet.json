@@ -1,0 +1,30 @@
+{
+  "$id": "ItemResultSet",
+  "name": "ItemResultSet",
+  "description": "a paged set of item results",
+  "required": [
+    "entries"
+  ],
+  "properties": {
+    "total": {
+      "description": "the total number of results",
+      "position": 0,
+      "type": "integer",
+      "format": "int32"
+    },
+    "start": {
+      "description": "the starting position of this set",
+      "position": 0,
+      "type": "integer",
+      "format": "int32"
+    },
+    "entries": {
+      "description": "the items in this set",
+      "position": 0,
+      "type": "array",
+      "items": {
+        "$ref": "Item.json"
+      }
+    }
+  }
+}

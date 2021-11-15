@@ -1,0 +1,21 @@
+{
+  "$id": "ItemTransitInfo",
+  "name": "ItemTransitInfo",
+  "description": "item transit information",
+  "required": [
+    "to",
+    "forHold"
+  ],
+  "properties": {
+    "to": {
+      "description": "the transit destination",
+      "position": 0,
+      "$ref": "Location.json"
+    },
+    "forHold": {
+      "description": "in transit for hold",
+      "position": 0,
+      "type": "boolean"
+    }
+  }
+}

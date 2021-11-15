@@ -1,0 +1,24 @@
+{
+  "$id": "ItemStatus",
+  "name": "ItemStatus",
+  "description": "an item status",
+  "required": [],
+  "properties": {
+    "code": {
+      "description": "the item status code",
+      "position": 0,
+      "type": "string"
+    },
+    "display": {
+      "description": "the display value of the item status",
+      "position": 0,
+      "type": "string"
+    },
+    "duedate": {
+      "description": "the due date of a checked-out item, in ISO 8601 format (yyyyMMdd'T'HHmmssZ)",
+      "position": 0,
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

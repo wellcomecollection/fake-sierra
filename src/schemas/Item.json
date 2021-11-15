@@ -1,0 +1,123 @@
+{
+  "$id": "Item",
+  "name": "Item",
+  "description": "an item record",
+  "required": [
+    "id",
+    "deleted",
+    "suppressed",
+    "bibIds",
+    "fixedFields",
+    "varFields"
+  ],
+  "properties": {
+    "id": {
+      "description": "the item record ID",
+      "position": 0,
+      "type": "string"
+    },
+    "updatedDate": {
+      "description": "the date and time of the last update to the record, in ISO 8601 format (yyyy-MM-dd'T'HH:mm:ssZZ)",
+      "position": 0,
+      "type": "string",
+      "format": "date-time"
+    },
+    "createdDate": {
+      "description": "the date and time the record was created, in ISO 8601 format (yyyy-MM-dd'T'HH:mm:ssZZ)",
+      "position": 0,
+      "type": "string",
+      "format": "date-time"
+    },
+    "deletedDate": {
+      "description": "the date the record was deleted, in ISO 8601 format (yyyy-MM-dd)",
+      "position": 0,
+      "type": "string",
+      "format": "date"
+    },
+    "deleted": {
+      "description": "whether the record has been deleted",
+      "position": 0,
+      "type": "boolean"
+    },
+    "suppressed": {
+      "description": "whether the record has been suppressed",
+      "position": 0,
+      "type": "boolean"
+    },
+    "bibIds": {
+      "description": "the IDs of the bibliographic records to which this item is linked",
+      "position": 0,
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "location": {
+      "description": "the location of the item with the location code and name",
+      "position": 0,
+      "$ref": "Location.json"
+    },
+    "status": {
+      "description": "the status of the item, with the code and display value, and a due date if the item is checked out",
+      "position": 0,
+      "$ref": "ItemStatus.json"
+    },
+    "volumes": {
+      "description": "the links to the volume records associated with this item",
+      "position": 0,
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "barcode": {
+      "description": "the barcode found in the item record",
+      "position": 0,
+      "type": "string"
+    },
+    "callNumber": {
+      "description": "the call number found in the item record",
+      "position": 0,
+      "type": "string"
+    },
+    "itemType": {
+      "description": "the type of the item record",
+      "position": 0,
+      "type": "string"
+    },
+    "transitInfo": {
+      "description": "transit information for the item record",
+      "position": 0,
+      "$ref": "ItemTransitInfo.json"
+    },
+    "copyNo": {
+      "description": "indicates which copy of the title corresponds to the item record",
+      "position": 0,
+      "type": "integer",
+      "format": "int32"
+    },
+    "holdCount": {
+      "description": "the number of holds associated with the item",
+      "position": 0,
+      "type": "integer",
+      "format": "int32"
+    },
+    "fixedFields": {
+      "description": "the fixed-length fields from the item record",
+      "position": 0,
+      "type": "map",
+      "items": {
+        "$ref1": "integer",
+        "$ref2": "FixedField.json"
+      }
+    },
+    "varFields": {
+      "description": "the variable-length fields from the item record",
+      "position": 0,
+      "type": "array",
+      "items": {
+        "$ref": "VarField.json"
+      }
+    }
+  }
+}

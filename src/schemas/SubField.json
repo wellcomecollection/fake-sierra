@@ -1,0 +1,23 @@
+{
+  "$id": "SubField",
+  "name": "SubField",
+  "description": "a subfield of a variable-length field",
+  "required": [
+    "tag",
+    "content"
+  ],
+  "properties": {
+    "tag": {
+      "description": "a subfield code",
+      "position": 0,
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1
+    },
+    "content": {
+      "description": "the subfield content",
+      "position": 0,
+      "type": "string"
+    }
+  }
+}

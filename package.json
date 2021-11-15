@@ -7,7 +7,8 @@
     "start": "NODE_ENV=production ts-node --transpile-only index.ts",
     "dev": "NODE_ENV=development nodemon index.ts",
     "test": "jest",
-    "prepare": "husky install"
+    "generate-types": "json2ts --cwd ./src/schemas -i './src/schemas/*.json' -o ./src/generated-types/",
+    "prepare": "husky install && yarn generate-types"
   },
   "dependencies": {
     "fastify": "^3.23.1",
@@ -19,6 +20,7 @@
     "@types/node": "^16.11.7",
     "husky": ">=6",
     "jest": "^27.3.1",
+    "json-schema-to-typescript": "^10.1.5",
     "lint-staged": ">=10",
     "nodemon": "^2.0.15",
     "prettier": "^2.4.1",

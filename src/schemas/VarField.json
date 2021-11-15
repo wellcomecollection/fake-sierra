@@ -1,0 +1,49 @@
+{
+  "$id": "VarField",
+  "name": "VarField",
+  "description": "a variable-length field for a bibliographic record or item record",
+  "required": [
+    "fieldTag"
+  ],
+  "properties": {
+    "fieldTag": {
+      "description": "the Innovative variable-length field type tag",
+      "position": 0,
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1
+    },
+    "marcTag": {
+      "description": "the MARC tag",
+      "position": 0,
+      "type": "string"
+    },
+    "ind1": {
+      "description": "the first MARC indicator, if present",
+      "position": 0,
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1
+    },
+    "ind2": {
+      "description": "the second MARC indicator, if present",
+      "position": 0,
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1
+    },
+    "content": {
+      "description": "the field content for varfields with no subfields",
+      "position": 0,
+      "type": "string"
+    },
+    "subfields": {
+      "description": "a list of subfields, if present",
+      "position": 0,
+      "type": "array",
+      "items": {
+        "$ref": "SubField.json"
+      }
+    }
+  }
+}

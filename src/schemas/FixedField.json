@@ -1,0 +1,25 @@
+{
+  "$id": "FixedField",
+  "name": "FixedField",
+  "description": "a fixed-length field from a bibliographic record or item record",
+  "required": [
+    "label"
+  ],
+  "properties": {
+    "label": {
+      "description": "the customizable label for the field",
+      "position": 0,
+      "type": "string"
+    },
+    "value": {
+      "description": "the stored value of the field (can be a String, LocalDate, DateTime, Boolean, Long, or Decimal depending on the field)",
+      "position": 0,
+      "$ref": "FixedFieldVal.json"
+    },
+    "display": {
+      "description": "the display value of the field",
+      "position": 0,
+      "type": "string"
+    }
+  }
+}
