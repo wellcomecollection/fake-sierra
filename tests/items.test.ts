@@ -11,7 +11,7 @@ describe("GET /v5/items", () => {
     const response = await server.inject({
       method: "GET",
       path: "/v5/items",
-      query: { ids: ids.join(",") },
+      query: { id: ids.join(",") },
       headers: authHeaders,
     });
 
@@ -51,7 +51,7 @@ describe("GET /v5/items", () => {
     const response = await server.inject({
       method: "GET",
       path: "/v5/items",
-      query: { ids: id, fields: fields.join(",") },
+      query: { id: id, fields: fields.join(",") },
       headers: authHeaders,
     });
 
@@ -72,7 +72,7 @@ describe("GET /v5/items", () => {
     const responseBeforeHold = await server.inject({
       method: "GET",
       path: "/v5/items",
-      query: { ids: id, fields: "holdCount" },
+      query: { id, fields: "holdCount" },
       headers: authHeaders,
     });
 
@@ -84,7 +84,7 @@ describe("GET /v5/items", () => {
     const responseAfterHold = await server.inject({
       method: "GET",
       path: "/v5/items",
-      query: { ids: id, fields: "holdCount" },
+      query: { id, fields: "holdCount" },
       headers: authHeaders,
     });
 
@@ -99,13 +99,13 @@ describe("GET /v5/items", () => {
     const response1 = await server.inject({
       method: "GET",
       path: "/v5/items",
-      query: { ids: id },
+      query: { id },
       headers: authHeaders,
     });
     const response2 = await server.inject({
       method: "GET",
       path: "/v5/items",
-      query: { ids: id },
+      query: { id },
       headers: authHeaders,
     });
 
