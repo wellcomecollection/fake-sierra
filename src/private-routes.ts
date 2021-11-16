@@ -1,5 +1,6 @@
 import { FastifyPluginAsync, onRequestHookHandler } from "fastify";
 import MemoryStore from "./services/MemoryStore";
+import { getItems } from "./handlers/get-items";
 
 const authenticateRequest = (
   tokenStore: MemoryStore<string, boolean>
@@ -33,9 +34,7 @@ const authenticateRequest = (
 
 const privateRoutes: FastifyPluginAsync = async (server) => {
   server.addHook("onRequest", authenticateRequest(server.tokenStore));
-  server.get("/items", async (req, reply) => {
-    reply.send("test");
-  });
+  server.get("/items", getItems(server.holdsStore));
 };
 
 export default privateRoutes;

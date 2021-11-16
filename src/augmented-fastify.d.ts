@@ -10,5 +10,6 @@ declare module "fastify" {
     HttpResponse = ServerResponse
   > {
     tokenStore: MemoryStore<string, boolean>;
+    holdsStore: MemoryStore<string, string>;
   }
 }
