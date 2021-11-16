@@ -5,7 +5,7 @@ const server = createServer();
 describe("/token", () => {
   it("returns an access token and stores it", async () => {
     const response = await server.inject({
-      method: "GET",
+      method: "POST",
       url: "/token",
     });
 

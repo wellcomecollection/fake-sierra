@@ -9,7 +9,7 @@ export const accessToken = async (
   authHeaders: OutgoingHttpHeaders;
 }> => {
   const response = await server.inject({
-    method: "GET",
+    method: "POST",
     url: "/token",
   });
   const data = response.json();
