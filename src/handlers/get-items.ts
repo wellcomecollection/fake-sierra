@@ -1,5 +1,5 @@
 import { RouteHandler } from "fastify";
-import Chance = require("chance");
+import { Chance } from "chance";
 import { Item } from "../types/Item";
 import MemoryStore from "../services/MemoryStore";
 import { ItemResultSet } from "../types/Item";
@@ -14,33 +14,54 @@ type ItemOptions = {
   onHold?: boolean;
 };
 
+const createDates = (rand: Chance.Chance) => {
+  const createdDate = rand.date({
+    year: parseInt(rand.year({ min: 1995, max: 2020 })),
+  }) as Date;
+  const msToUpdate = rand.natural({
+    max:
+      new Date(2020, 11, 31, 23, 59, 59, 999).getTime() - createdDate.getTime(),
+  });
+  const updatedDate = new Date(
+    createdDate.getTime() + msToUpdate
+  ).toISOString();
+  return { updatedDate, createdDate: createdDate.toISOString() };
+};
+
 const createItem = (
   { id, onHold }: ItemOptions,
   override?: Partial<Item>
 ): Item => {
   const rand = new Chance(id);
-  const dateUpperLimit = rand.date({ year: 2021 }) as Date;
-  const createdDate = rand.date({
-    year: parseInt(rand.year({ min: 1995, max: dateUpperLimit.getFullYear() })),
-  }) as Date;
-  const msToUpdate = rand.natural({
-    max: dateUpperLimit.getTime() - createdDate.getTime(),
-  });
+  const { updatedDate, createdDate } = createDates(rand);
+  const idOpts: Partial<Chance.StringOptions> = {
+    alpha: true,
+    numeric: true,
+    casing: "upper",
+  };
   return {
     id,
-    location: { code: "", name: "" },
-    status: {},
+    createdDate,
+    updatedDate,
+    location: { code: "abcde", name: "Closed Stores test" },
+    status: {
+      code: "-",
+      display: "Available",
+    },
     deleted: false,
     suppressed: false,
     holdCount: onHold ? 1 : 0,
-    callNumber: rand.string({ symbols: false, length: 5, casing: "upper" }),
-    barcode: rand.string({ symbols: false, length: 5, casing: "upper" }),
+    callNumber: rand.string({ ...idOpts, length: 5 }),
+    barcode: rand.string({ ...idOpts, length: 5 }),
     bibIds: [rand.natural({ min: 1e6, max: 1e7 }).toString()],
     copyNo: 1,
     itemType: "book",
-    createdDate: createdDate.toISOString(),
-    updatedDate: new Date(createdDate.getTime() + msToUpdate).toISOString(),
-    fixedFields: {},
+    fixedFields: {
+      "79": {
+        value: "abcde",
+        display: "Closed Stores test",
+      },
+    },
     varFields: [],
     volumes: [],
     ...override,
