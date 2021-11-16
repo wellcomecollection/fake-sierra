@@ -1,11 +1,11 @@
 import { RouteHandler } from "fastify";
 import { Chance } from "chance";
-import { Item } from "../types/Item";
+import { Item } from "../types/items";
 import MemoryStore from "../services/MemoryStore";
-import { ItemResultSet } from "../types/Item";
+import { ItemResultSet } from "../types/items";
 
 type Parameters = {
-  ids?: string;
+  id?: string;
   fields?: string;
 };
 
@@ -58,6 +58,7 @@ const createItem = (
     itemType: "book",
     fixedFields: {
       "79": {
+        label: "LOCATION",
         value: "abcde",
         display: "Closed Stores test",
       },
@@ -101,8 +102,8 @@ export const getItems =
     holdsStore: MemoryStore<string, string>
   ): RouteHandler<{ Querystring?: Parameters }> =>
   (request, reply) => {
-    const { ids, fields } = request.query ?? {};
-    const idList = ids?.split(",") ?? randomIds(50, "SEED");
+    const { id, fields } = request.query ?? {};
+    const idList = id?.split(",") ?? randomIds(50, "SEED");
     const fieldList = fields?.split(",") ?? defaultFields;
 
     const items: Item[] = idList.map((id) => {

@@ -61,7 +61,7 @@ export interface Item {
    * the fixed-length fields from the item record
    */
   fixedFields: {
-    [k: string]: unknown;
+    [k: number | string]: FixedField;
   };
   /**
    * the variable-length fields from the item record
@@ -155,6 +155,24 @@ export interface SubField {
    */
   content: string;
   [k: string]: unknown;
+}
+
+/**
+ * a fixed-length field from a bibliographic record or item record
+ */
+export interface FixedField<T = string> {
+  /**
+   * the customizable label for the field
+   */
+  label: string;
+  /**
+   * the stored value of the field
+   */
+  value?: T;
+  /**
+   * the display value of the field
+   */
+  display: string;
 }
 
 /**

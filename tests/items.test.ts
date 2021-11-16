@@ -1,5 +1,5 @@
 import { createServer } from "../src/server";
-import { ItemResultSet } from "../src/types/Item";
+import { ItemResultSet } from "../src/types/items";
 import { accessToken } from "./helpers";
 import { defaultFields, mandatoryFields } from "../src/handlers/get-items";
 
