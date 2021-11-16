@@ -1,82 +1,11 @@
 import { RouteHandler } from "fastify";
-import { Chance } from "chance";
-import { Item } from "../types/items";
+import { Item, ItemResultSet } from "../types/items";
 import MemoryStore from "../services/MemoryStore";
-import { ItemResultSet } from "../types/items";
+import { createItem, randomIds } from "../services/item-generators";
 
 type Parameters = {
   id?: string;
   fields?: string;
-};
-
-type ItemOptions = {
-  id: string;
-  onHold?: boolean;
-};
-
-const createDates = (rand: Chance.Chance) => {
-  const createdDate = rand.date({
-    year: parseInt(rand.year({ min: 1995, max: 2020 })),
-  }) as Date;
-  const msToUpdate = rand.natural({
-    max:
-      new Date(2020, 11, 31, 23, 59, 59, 999).getTime() - createdDate.getTime(),
-  });
-  const updatedDate = new Date(
-    createdDate.getTime() + msToUpdate
-  ).toISOString();
-  return { updatedDate, createdDate: createdDate.toISOString() };
-};
-
-const createItem = (
-  { id, onHold }: ItemOptions,
-  override?: Partial<Item>
-): Item => {
-  const rand = new Chance(id);
-  const { updatedDate, createdDate } = createDates(rand);
-  const idOpts: Partial<Chance.StringOptions> = {
-    alpha: true,
-    numeric: true,
-    casing: "upper",
-  };
-  return {
-    id,
-    createdDate,
-    updatedDate,
-    location: { code: "abcde", name: "Closed Stores test" },
-    status: {
-      code: "-",
-      display: "Available",
-    },
-    deleted: false,
-    suppressed: false,
-    holdCount: onHold ? 1 : 0,
-    callNumber: rand.string({ ...idOpts, length: 5 }),
-    barcode: rand.string({ ...idOpts, length: 5 }),
-    bibIds: [rand.natural({ min: 1e6, max: 1e7 }).toString()],
-    copyNo: 1,
-    itemType: "book",
-    fixedFields: {
-      "79": {
-        label: "LOCATION",
-        value: "abcde",
-        display: "Closed Stores test",
-      },
-      "88": {
-        label: "STATUS",
-        value: "-",
-        display: "Available",
-      },
-      "108": {
-        label: "OPACMSG",
-        value: "f",
-        display: "Online request",
-      },
-    },
-    varFields: [],
-    volumes: [],
-    ...override,
-  };
 };
 
 export const mandatoryFields: Array<keyof Item> = ["id"];
@@ -93,19 +22,11 @@ export const defaultFields: Array<keyof Item> = [
   "callNumber",
 ];
 
-const randomIds = (n: number, seed: string | number): string[] => {
-  const rand = new Chance(seed);
-  const array = Array.from({ length: n }).map(() =>
-    rand.natural({ min: 1e6, max: 1e7 }).toString()
-  );
-
-  // Prevent collisions
-  if (new Set(array).size === array.length) {
-    return array;
-  } else {
-    return randomIds(n, seed);
-  }
-};
+const pickFields = <T extends Record<string, unknown>>(
+  fields: (number | string)[],
+  object: T
+): T =>
+  Object.assign({}, ...fields.map((field) => ({ [field]: object[field] })));
 
 export const getItems =
   (
@@ -115,17 +36,12 @@ export const getItems =
     const { id, fields } = request.query ?? {};
     const idList = id?.split(",") ?? randomIds(50, "SEED");
     const fieldList = fields?.split(",") ?? defaultFields;
+    const fieldSet = [...new Set([...fieldList, ...mandatoryFields])];
 
     const items: Item[] = idList.map((id) => {
       const onHold = holdsStore.has(id);
       const fullItem = createItem({ id, onHold });
-      const fieldSet = new Set([...fieldList, ...mandatoryFields]);
-      return Object.assign(
-        {},
-        ...Array.from(fieldSet.values()).map((field) => ({
-          [field]: fullItem[field],
-        }))
-      );
+      return pickFields(fieldSet, fullItem);
     });
 
     const response: ItemResultSet = {
