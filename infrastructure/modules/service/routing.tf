@@ -13,7 +13,7 @@ resource "aws_alb_target_group" "http" {
 
   health_check {
     interval            = 10
-    path                = "/"
+    path                = "/management/healthcheck"
     port                = module.nginx_container.container_port
     protocol            = "HTTP"
     timeout             = 5
