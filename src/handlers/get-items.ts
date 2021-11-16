@@ -62,6 +62,16 @@ const createItem = (
         value: "abcde",
         display: "Closed Stores test",
       },
+      "88": {
+        label: "STATUS",
+        value: "-",
+        display: "Available",
+      },
+      "108": {
+        label: "OPACMSG",
+        value: "f",
+        display: "Online request",
+      },
     },
     varFields: [],
     volumes: [],
