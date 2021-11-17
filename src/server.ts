@@ -8,6 +8,9 @@ export const createServer = (options?: FastifyServerOptions) => {
   server.decorate("tokenStore", new MemoryStore<string, boolean>());
   server.decorate("holdsStore", new MemoryStore<string, string>());
 
+  server.get("/management/healthcheck", async (_, reply) =>
+    reply.send({ message: "ok" })
+  );
   server.post("/token", getToken(server.tokenStore));
   server.register(privateRoutes, { prefix: "/v5" });
 
