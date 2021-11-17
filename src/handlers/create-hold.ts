@@ -1,5 +1,7 @@
 import MemoryStore from "../services/MemoryStore";
 import { RouteHandler } from "fastify";
+import { createItem } from "../services/item-generators";
+import { isRequestable } from "../services/item-predicates";
 
 type UrlParams = {
   patronId: string;
@@ -33,7 +35,8 @@ export const createHold =
     }
 
     const itemId = request.body!.recordNumber.toString();
-    if (holdsStore.has(itemId)) {
+    const item = createItem({ id: itemId, onHold: holdsStore.has(itemId) });
+    if (!isRequestable(item)) {
       reply.code(500).send({
         code: 132,
         specificCode: 2,
