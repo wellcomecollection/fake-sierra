@@ -95,3 +95,34 @@ export interface HoldResultSet {
   entries: Hold[];
   [k: string]: unknown;
 }
+
+/**
+ * a hold
+ */
+export interface PatronHoldPost {
+  /**
+   * the record type code, i.e., bib (b), item (i), or volume (j), associated with the hold
+   */
+  recordType: string;
+  /**
+   * the held record number
+   */
+  recordNumber: number;
+  /**
+   * the pickup location code
+   */
+  pickupLocation: string;
+  /**
+   * the date after which the held item is no longer needed, in ISO 8601 format (yyyy-MM-dd)
+   */
+  neededBy?: string;
+  /**
+   * the number of copies to hold
+   */
+  numberOfCopies?: number;
+  /**
+   * an informational note related to the hold
+   */
+  note?: string;
+  [k: string]: unknown;
+}

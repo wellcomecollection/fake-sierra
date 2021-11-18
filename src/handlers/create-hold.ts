@@ -2,25 +2,16 @@ import { RouteHandler } from "fastify";
 import { createItem } from "../services/item-generators";
 import { isRequestable } from "../services/item-predicates";
 import HoldsStore from "../services/HoldsStore";
+import { PatronHoldPost } from "../types/patrons";
 
 type UrlParams = {
   patronId: string;
 };
 
-// https://sandbox.iii.com/iii/sierra-api/docs/v5/patrons
-type RequestBody = {
-  recordType: string;
-  recordNumber: number;
-  pickupLocation: string;
-  neededBy?: string;
-  numberOfCopies?: number;
-  note?: string;
-};
-
 export const createHold =
   (
     holdsStore: HoldsStore
-  ): RouteHandler<{ Params?: UrlParams; Body?: RequestBody }> =>
+  ): RouteHandler<{ Params?: UrlParams; Body?: PatronHoldPost }> =>
   async (request, reply) => {
     const { patronId } = request.params || {};
     if (!patronId || !request.body?.recordNumber) {
