@@ -5,7 +5,7 @@ import { defaultFields, mandatoryFields } from "../src/handlers/get-items";
 
 describe("GET /v5/items", () => {
   it("returns items with the given IDs", async () => {
-    const ids = ["1234567", "1234568"];
+    const ids = ["1234560", "1234561"];
     const server = await createServer();
     const { authHeaders } = await accessToken(server);
     const response = await server.inject({
@@ -44,7 +44,7 @@ describe("GET /v5/items", () => {
   });
 
   it("returns items with the specified fields", async () => {
-    const id = "1234567";
+    const id = "1234560";
     const fields = ["createdDate", "status", "itemType"];
     const server = await createServer();
     const { authHeaders } = await accessToken(server);
@@ -66,7 +66,7 @@ describe("GET /v5/items", () => {
   });
 
   it("indicates that items are on hold", async () => {
-    const id = "1234567";
+    const id = "1234560";
     const server = await createServer();
     const { authHeaders } = await accessToken(server);
     const responseBeforeHold = await server.inject({
@@ -93,7 +93,7 @@ describe("GET /v5/items", () => {
   });
 
   it("consistently returns the same item for the same ID", async () => {
-    const id = "1234567";
+    const id = "1234560";
     const server = await createServer();
     const { authHeaders } = await accessToken(server);
     const response1 = await server.inject({

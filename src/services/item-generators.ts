@@ -1,5 +1,7 @@
 import { Chance } from "chance";
-import { Item } from "../types/items";
+import { FixedField, Item, ItemStatus, Location } from "../types/items";
+
+type ItemVariant = "closed-stores-available" | "open-shelves-available";
 
 type ItemOptions = {
   id: string;
@@ -17,16 +19,19 @@ export const createItem = (
   override?: Partial<Item>
 ): Item => {
   const rand = new Chance(id);
+
+  const variant = getVariantForId(id);
+  const location = getLocation(variant);
+  const status = getStatus(variant);
+  const opacMsg = getOpacMsg(variant);
   const { updatedDate, createdDate } = createDates(rand);
+
   return {
     id,
     createdDate,
     updatedDate,
-    location: { code: "abcde", name: "Closed Stores test" },
-    status: {
-      code: "-",
-      display: "Available",
-    },
+    location,
+    status,
     deleted: false,
     suppressed: false,
     holdCount: onHold ? 1 : 0,
@@ -38,24 +43,77 @@ export const createItem = (
     fixedFields: {
       "79": {
         label: "LOCATION",
-        value: "abcde",
-        display: "Closed Stores test",
+        value: location.code,
+        display: location.name,
       },
       "88": {
         label: "STATUS",
-        value: "-",
-        display: "Available",
+        value: status.code,
+        display: status.display || "",
       },
       "108": {
         label: "OPACMSG",
-        value: "f",
-        display: "Online request",
+        ...opacMsg,
       },
     },
     varFields: [],
     volumes: [],
     ...override,
   };
+};
+// See behaviour described in README
+const getVariantForId = (id: string): ItemVariant => {
+  if (id.length === 7 && id.endsWith("0")) {
+    return "closed-stores-available";
+  }
+  if (id.length === 7 && id.endsWith("1")) {
+    return "open-shelves-available";
+  }
+  return "closed-stores-available";
+};
+
+// See https://github.com/wellcomecollection/catalogue-api/blob/main/common/stacks/src/main/scala/weco/catalogue/source_model/sierra/rules/SierraPhysicalLocationType.scala
+const getLocation = (variant: ItemVariant): Location => {
+  switch (variant) {
+    case "closed-stores-available":
+      return {
+        code: "abcde",
+        name: "Closed stores test",
+      };
+    case "open-shelves-available":
+      return {
+        code: "bcdef",
+        name: "Open shelves test",
+      };
+  }
+};
+
+// See https://github.com/wellcomecollection/catalogue-api/blob/main/common/stacks/src/main/scala/weco/catalogue/source_model/sierra/source/Status.scala
+const getStatus = (variant: ItemVariant): ItemStatus => {
+  switch (variant) {
+    case "closed-stores-available":
+    case "open-shelves-available":
+      return {
+        code: "-",
+        display: "Available",
+      };
+  }
+};
+
+// See https://github.com/wellcomecollection/catalogue-api/blob/main/common/stacks/src/main/scala/weco/catalogue/source_model/sierra/source/OpacMsg.scala
+const getOpacMsg = (variant: ItemVariant): Omit<FixedField, "label"> => {
+  switch (variant) {
+    case "closed-stores-available":
+      return {
+        value: "f",
+        display: "Online request",
+      };
+    case "open-shelves-available":
+      return {
+        value: "o",
+        display: "Open shelves",
+      };
+  }
 };
 
 const createDates = (rand: Chance.Chance) => {
