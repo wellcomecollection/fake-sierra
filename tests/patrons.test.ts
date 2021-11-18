@@ -108,3 +108,24 @@ describe("GET /v5/patrons/:patronId/holds", () => {
     expect(responseData.entries).toBeEmpty();
   });
 });
+
+describe("DELETE /v5/patrons/:patronId/holds", () => {
+  it("deletes all of the patron's holds", async () => {
+    const patronId = "1234567";
+    const holdItemIds = ["1000000", "2000000"];
+    const server = await createServer();
+    const { authHeaders } = await accessToken(server);
+
+    holdItemIds.forEach((itemId) => {
+      server.holdsStore.create({ patronId, itemId });
+    });
+    const response = await server.inject({
+      method: "DELETE",
+      path: `/v5/patrons/${patronId}/holds`,
+      headers: authHeaders,
+    });
+
+    expect(response.statusCode).toBe(204);
+    expect(server.holdsStore.patronHolds(patronId)).toBeEmpty();
+  });
+});

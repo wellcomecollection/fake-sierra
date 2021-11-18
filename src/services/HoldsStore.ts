@@ -10,6 +10,14 @@ class HoldsStore {
     return this.holds.has(itemId);
   }
 
+  public deleteForPatron(patronId: string): void {
+    const itemIds = this.patrons.get(patronId);
+    if (itemIds) {
+      itemIds.forEach((id) => this.holds.delete(id));
+    }
+    this.patrons.set(patronId, []);
+  }
+
   public create({
     patronId,
     itemId,

@@ -3,6 +3,7 @@ import MemoryStore from "./services/MemoryStore";
 import { getItems } from "./handlers/get-items";
 import { createHold } from "./handlers/create-hold";
 import { getHolds } from "./handlers/get-holds";
+import { deletePatronHolds } from "./handlers/delete-patron-holds";
 
 const authenticateRequest = (
   tokenStore: MemoryStore<string, boolean>
@@ -42,6 +43,10 @@ const privateRoutes: FastifyPluginAsync = async (server) => {
     createHold(server.holdsStore)
   );
   server.get("/patrons/:patronId/holds", getHolds(server.holdsStore));
+  server.delete(
+    "/patrons/:patronId/holds",
+    deletePatronHolds(server.holdsStore)
+  );
 };
 
 export default privateRoutes;
