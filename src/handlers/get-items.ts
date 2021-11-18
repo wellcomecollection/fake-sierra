@@ -1,6 +1,5 @@
-import { RouteHandler } from "fastify";
+import { FastifyInstance, RouteHandler } from "fastify";
 import { Item, ItemResultSet } from "../types/items";
-import MemoryStore from "../services/MemoryStore";
 import { createItem, randomIds } from "../services/item-generators";
 
 type Parameters = {
@@ -30,7 +29,7 @@ const pickFields = <T extends Record<string, unknown>>(
 
 export const getItems =
   (
-    holdsStore: MemoryStore<string, string>
+    holdsStore: FastifyInstance["holdsStore"]
   ): RouteHandler<{ Querystring?: Parameters }> =>
   (request, reply) => {
     const { id, fields } = request.query ?? {};
@@ -39,7 +38,7 @@ export const getItems =
     const fieldSet = [...new Set([...fieldList, ...mandatoryFields])];
 
     const items: Item[] = idList.map((id) => {
-      const onHold = holdsStore.has(id);
+      const onHold = holdsStore.holdExistsForItem(id);
       const fullItem = createItem({ id, onHold });
       return pickFields(fieldSet, fullItem);
     });

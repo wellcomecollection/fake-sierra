@@ -1,7 +1,7 @@
-import MemoryStore from "../services/MemoryStore";
 import { RouteHandler } from "fastify";
 import { createItem } from "../services/item-generators";
 import { isRequestable } from "../services/item-predicates";
+import HoldsStore from "../services/HoldsStore";
 
 type UrlParams = {
   patronId: string;
@@ -19,7 +19,7 @@ type RequestBody = {
 
 export const createHold =
   (
-    holdsStore: MemoryStore<string, string>
+    holdsStore: HoldsStore
   ): RouteHandler<{ Params?: UrlParams; Body?: RequestBody }> =>
   async (request, reply) => {
     const { patronId } = request.params || {};
@@ -35,7 +35,10 @@ export const createHold =
     }
 
     const itemId = request.body!.recordNumber.toString();
-    const item = createItem({ id: itemId, onHold: holdsStore.has(itemId) });
+    const item = createItem({
+      id: itemId,
+      onHold: holdsStore.holdExistsForItem(itemId),
+    });
     if (!isRequestable(item)) {
       reply.code(500).send({
         code: 132,
@@ -47,6 +50,6 @@ export const createHold =
       return reply;
     }
 
-    holdsStore.set(itemId, patronId);
+    holdsStore.create({ patronId, itemId });
     reply.code(204).send();
   };

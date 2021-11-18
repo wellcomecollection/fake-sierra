@@ -19,8 +19,8 @@ describe("POST /v5/patrons/:patronId/holds/requests", () => {
     });
 
     expect(response.statusCode).toBe(204);
-    expect(server.holdsStore.has(itemId)).toBeTrue();
-    expect(server.holdsStore.get(itemId)).toBe(patronId);
+    expect(server.holdsStore.holdExistsForItem(itemId)).toBeTrue();
+    expect(server.holdsStore.patronHolds(patronId)[0].record).toEndWith(itemId);
   });
 
   it("fails if there is already a hold for an item", async () => {
@@ -29,7 +29,7 @@ describe("POST /v5/patrons/:patronId/holds/requests", () => {
     const server = await createServer();
     const { authHeaders } = await accessToken(server);
 
-    server.holdsStore.set(itemId, patronId);
+    server.holdsStore.create({ itemId, patronId });
     const response = await server.inject({
       method: "POST",
       path: `/v5/patrons/${patronId}/holds/requests`,
