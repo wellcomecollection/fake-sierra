@@ -27,13 +27,11 @@ describe("private routes", () => {
 
   it("are accepted when a valid token is present", async () => {
     const server = createServer();
-    const { access_token } = await accessToken(server);
+    const { authHeaders } = await accessToken(server);
     const response = await server.inject({
       method: "GET",
       url: "/v5/items",
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-      },
+      headers: authHeaders,
     });
 
     expect(response.statusCode).toBe(200);

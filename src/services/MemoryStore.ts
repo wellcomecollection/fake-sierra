@@ -16,13 +16,13 @@ class MemoryStore<Key = string, Value = string> {
     this.map.delete(key);
   }
 
-  public get(key: Key): Value | undefined {
-    if (this.lifetimes.has(key) && this.lifetimes.get(key)! < Date.now()) {
-      this.lifetimes.delete(key);
-      this.map.delete(key);
-      return undefined;
-    }
+  public has(key: Key): boolean {
+    this.checkTtl(key);
+    return this.map.has(key);
+  }
 
+  public get(key: Key): Value | undefined {
+    this.checkTtl(key);
     if (this.map.has(key)) {
       const value = this.map.get(key)!;
       this.map.delete(key);
@@ -35,15 +35,25 @@ class MemoryStore<Key = string, Value = string> {
 
   public set(key: Key, value: Value, ttl?: number): void {
     this.map.set(key, value);
-
     if (ttl) {
       this.lifetimes.set(key, Date.now() + ttl);
     }
 
+    this.evict();
+  }
+
+  private evict(): void {
     // LRU eviction; Map has guaranteed ordering of keys()
     if (this.map.size > this.maxSize) {
       const lruKey = this.map.keys().next().value;
       this.map.delete(lruKey);
+    }
+  }
+
+  private checkTtl(key: Key): void {
+    if (this.lifetimes.has(key) && this.lifetimes.get(key)! < Date.now()) {
+      this.lifetimes.delete(key);
+      this.map.delete(key);
     }
   }
 }

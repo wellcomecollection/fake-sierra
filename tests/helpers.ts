@@ -1,12 +1,22 @@
 import { FastifyInstance } from "fastify";
+import { OutgoingHttpHeaders } from "http";
 
 export const accessToken = async (
   server: FastifyInstance
-): Promise<{ access_token: string; expires_in: number }> => {
+): Promise<{
+  access_token: string;
+  expires_in: number;
+  authHeaders: OutgoingHttpHeaders;
+}> => {
   const response = await server.inject({
-    method: "GET",
+    method: "POST",
     url: "/token",
   });
-
-  return response.json();
+  const data = response.json();
+  return {
+    ...data,
+    authHeaders: {
+      Authorization: `Bearer ${data.access_token}`,
+    },
+  };
 };
