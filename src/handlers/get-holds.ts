@@ -1,5 +1,6 @@
-import { FastifyInstance, RouteHandler } from "fastify";
+import { RouteHandler } from "fastify";
 import { Hold, HoldResultSet } from "../types/patrons";
+import HoldsStore from "../services/HoldsStore";
 
 type UrlParams = {
   patronId: string;
@@ -7,7 +8,7 @@ type UrlParams = {
 
 export const getHolds =
   (
-    holdsStore: FastifyInstance["holdsStore"]
+    holdsStore: HoldsStore
   ): RouteHandler<{ Params?: UrlParams }> =>
   (request, reply) => {
     const { patronId } = request.params || {};

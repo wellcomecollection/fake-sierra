@@ -1,6 +1,7 @@
-import { FastifyInstance, RouteHandler } from "fastify";
+import { RouteHandler } from "fastify";
 import { Item, ItemResultSet } from "../types/items";
 import { createItem, randomIds } from "../services/item-generators";
+import HoldsStore from "../services/HoldsStore";
 
 type Parameters = {
   id?: string;
@@ -29,7 +30,7 @@ const pickFields = <T extends Record<string, unknown>>(
 
 export const getItems =
   (
-    holdsStore: FastifyInstance["holdsStore"]
+    holdsStore: HoldsStore
   ): RouteHandler<{ Querystring?: Parameters }> =>
   (request, reply) => {
     const { id, fields } = request.query ?? {};
