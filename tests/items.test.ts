@@ -79,7 +79,7 @@ describe("GET /v5/items", () => {
     expect(responseBeforeHold.statusCode).toBe(200);
     expect(responseBeforeHold.json().entries[0].holdCount).toBe(0);
 
-    server.holdsStore.set(id, "test_user_id");
+    server.holdsStore.create({ patronId: "test", itemId: id });
 
     const responseAfterHold = await server.inject({
       method: "GET",
