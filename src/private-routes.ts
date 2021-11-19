@@ -1,6 +1,9 @@
 import { FastifyPluginAsync, onRequestHookHandler } from "fastify";
 import MemoryStore from "./services/MemoryStore";
 import { getItems } from "./handlers/get-items";
+import { createHold } from "./handlers/create-hold";
+import { getHolds } from "./handlers/get-holds";
+import { deletePatronHolds } from "./handlers/delete-patron-holds";
 
 const authenticateRequest = (
   tokenStore: MemoryStore<string, boolean>
@@ -35,6 +38,15 @@ const authenticateRequest = (
 const privateRoutes: FastifyPluginAsync = async (server) => {
   server.addHook("onRequest", authenticateRequest(server.tokenStore));
   server.get("/items", getItems(server.holdsStore));
+  server.post(
+    "/patrons/:patronId/holds/requests",
+    createHold(server.holdsStore)
+  );
+  server.get("/patrons/:patronId/holds", getHolds(server.holdsStore));
+  server.delete(
+    "/patrons/:patronId/holds",
+    deletePatronHolds(server.holdsStore)
+  );
 };
 
 export default privateRoutes;

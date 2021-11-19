@@ -14,6 +14,7 @@ class MemoryStore<Key = string, Value = string> {
 
   public delete(key: Key): void {
     this.map.delete(key);
+    this.lifetimes.delete(key);
   }
 
   public has(key: Key): boolean {
@@ -50,11 +51,14 @@ class MemoryStore<Key = string, Value = string> {
     }
   }
 
-  private checkTtl(key: Key): void {
+  // Returns true if the key expired
+  private checkTtl(key: Key): boolean {
     if (this.lifetimes.has(key) && this.lifetimes.get(key)! < Date.now()) {
       this.lifetimes.delete(key);
       this.map.delete(key);
+      return true;
     }
+    return false;
   }
 }
 
