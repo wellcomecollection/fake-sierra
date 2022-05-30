@@ -1,4 +1,4 @@
-FROM 760097843905.dkr.ecr.eu-west-1.amazonaws.com/node:16-alpine as production
+FROM public.ecr.aws/docker/library/node:16-slim as production
 WORKDIR /app
 
 COPY yarn.lock package.json ./
