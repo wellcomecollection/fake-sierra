@@ -50,7 +50,7 @@ module "task_definition" {
 }
 
 module "service" {
-  source = "git::github.com/wellcomecollection/terraform-aws-ecs-service.git//modules/service?ref=v3.2.0"
+  source = "git::github.com/wellcomecollection/terraform-aws-ecs-service.git//modules/service?ref=v3.13.0"
 
   cluster_arn  = var.cluster_arn
   service_name = var.service_name
@@ -69,8 +69,4 @@ module "service" {
   container_port = module.nginx_container.container_port
 
   propagate_tags = "SERVICE"
-
-  deployment_service = var.deployment_service_name
-  deployment_env     = var.deployment_service_env
-  deployment_label   = "initial"
 }

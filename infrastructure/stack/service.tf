@@ -1,8 +1,6 @@
 module "service" {
-  source                  = "../modules/service"
-  service_name            = "fake-sierra-${var.environment_name}"
-  deployment_service_name = "fake-sierra"
-  deployment_service_env  = var.environment_name
+  source       = "../modules/service"
+  service_name = "fake-sierra-${var.environment_name}"
 
   container_image = var.app_image
   container_port  = local.app_port
