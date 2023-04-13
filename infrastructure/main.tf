@@ -5,7 +5,7 @@ module "fake_sierra" {
   app_image        = "${aws_ecr_repository.fake_sierra.repository_url}:env.public"
 
   cluster_arn = aws_ecs_cluster.cluster.arn
-  cert_arn    = aws_acm_certificate.cert.arn
+  cert_arn    = module.cert.arn
 
   private_subnets = local.private_subnets
   public_subnets  = local.public_subnets
